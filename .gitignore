@@ -1,0 +1,28 @@
+# Node modules
+/node_modules
+
+# Build files
+/build
+/dist
+
+# Environment variables
+.env
+./image_generator 
+
+# Python bytecode
+__pycache__
+
+# Virtual environment
+venv
+.venv
+
+# IDE files
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# Compiled Python files
+*.pyc
+
+# Environment variables
+.env
