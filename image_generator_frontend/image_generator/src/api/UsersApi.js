@@ -28,6 +28,19 @@ const login = async (userData) => {
   }
 };
 
+const generateImage = async (promptData) => {
+  console.log(promptData)
+  try {
+    const response = await userAPI.post('/generate_image', promptData);
+    return response.data;
+  } catch (error) {
+    console.error('Error generating image:', error);
+    throw error;
+  }
+};
+
+
+
 const getUserInfo = async () => {
   try {
     const response = await userAPI.get('/user');
@@ -54,4 +67,5 @@ export const apiServices = {
   login,
   getUserInfo,
   getToken,
+  generateImage,
 };

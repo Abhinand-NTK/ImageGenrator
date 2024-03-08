@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { apiServices } from '../api/UsersApi';
 
 const ImageGenerator = () => {
     const [inputText, setInputText] = useState('');
@@ -8,9 +9,11 @@ const ImageGenerator = () => {
         setInputText(e.target.value);
     };
 
-    const handleGenerateImage = () => {
-        const image = generateImageFromText(inputText);
-        setGeneratedImage(image);
+    const handleGenerateImage = async () => {
+        // const image = generateImageFromText(inputText);
+        const response = await apiServices.generateImage({"prompt":inputText})
+        console.log("This is the response i have ::---", response)
+        // setGeneratedImage(image);
     };
 
     const handleDownloadImage = () => {

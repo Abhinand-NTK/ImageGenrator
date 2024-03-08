@@ -203,6 +203,8 @@ from datetime import datetime, timedelta
 import database
 import schemas
 from models import User
+from fastapi.responses import JSONResponse
+from openai import OpenAI
 
 load_dotenv()
 
@@ -211,6 +213,7 @@ postgres_password = os.getenv("POSTGRES_PASSWORD")
 postgres_db = os.getenv("POSTGRES_DB")
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
+API_KEY = os.getenv("API_KEY")
 
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
 
@@ -293,6 +296,42 @@ def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
     if not db_user or not pwd_context.verify(user.password, db_user.password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     return {"message": "Login successful"}
+
+
+@app.post("/generate_image")
+async def generate_image(request_data: schemas.GenerateImageRequest):
+  
+    try:
+        client = OpenAI(api_key=API_KEY)
+        print(API_KEY)
+        print(request_data.prompt)
+
+        response = client.images.generate(
+            model="dall-e-2",
+            prompt=request_data.prompt,
+            size="1024x1024",
+            quality="standard",
+            n=1,
+        )
+        print("response")
+        print("res:-",response)
+
+        # response = client.images.generate(
+        #     model="dall-e-2",
+        #     prompt=data,
+        #     size="1024x1024",
+        #     quality="standard",
+        #     n=1,
+        # )
+
+        output = response.data[0].url
+        print(response.data[0].url)
+        print(output)
+        return JSONResponse(content={"data": output}, status_code=200)
+    except Exception as e:
+        return HTTPException(status_code=500, detail=str(e))
+    
+
 
 if __name__ == "__main__":
     import uvicorn
