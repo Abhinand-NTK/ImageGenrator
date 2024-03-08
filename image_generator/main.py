@@ -124,17 +124,7 @@ async def generate_image(request_data: schemas.GenerateImageRequest):
         print("response")
         print("res:-",response)
 
-        # response = client.images.generate(
-        #     model="dall-e-2",
-        #     prompt=data,
-        #     size="1024x1024",
-        #     quality="standard",
-        #     n=1,
-        # )
-
         output = response.data[0].url
-        print(response.data[0].url)
-        print(output)
         return JSONResponse(content={"data": output}, status_code=200)
     except Exception as e:
         return HTTPException(status_code=500, detail=str(e))
